@@ -1,0 +1,49 @@
+
+GET http://localhost:3006/users/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWF0IjoxNzI0NjU1NjE0fQ.sUx_fNJkX_cBnmyatJ0CSjp6m8ni4da3Vo141G3CGbY
+
+###
+
+POST http://localhost:3006/users/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWF0IjoxNzI0NjU1NjE0fQ.sUx_fNJkX_cBnmyatJ0CSjp6m8ni4da3Vo141G3CGbY
+Accept: application/application/json
+
+{
+    "id" : 5,
+    "username": "test321",
+    "password": "test@321",
+    "role_name": "Admin"
+}
+
+###
+
+
+PUT http://localhost:3006/users/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWF0IjoxNzI0NjU1NjE0fQ.sUx_fNJkX_cBnmyatJ0CSjp6m8ni4da3Vo141G3CGbY
+Accept: application/application/json
+
+{
+    "username": "Admin",
+    "password": "Admin",
+    "role_name": "Admin"
+}
+
+###
+
+DELETE http://localhost:3006/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWF0IjoxNzI0NjU1NjE0fQ.sUx_fNJkX_cBnmyatJ0CSjp6m8ni4da3Vo141G3CGbY
+
+###
+
+POST http://localhost:3006/login
+Content-Type: application/json
+
+
+{
+    "username": "Saiteja",
+    "password": "sai@123"
+}
+
+###
