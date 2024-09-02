@@ -4,13 +4,18 @@ const {open} = require('sqlite')
 const sqlite3 = require('sqlite3')
 const bcrypt = require('bcrypt')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
 
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: ['http://localhoost:3000'],
+    methods : ["GET", "POST"],
+    credentials: true
+}))
 app.use(express.json())
-
+app.use(bodyParser.json())
 
 const dbPath = path.join(__dirname, "hotelResidence.db")
 
@@ -33,29 +38,29 @@ const initialDbAndServer = async () => {
 
 initialDbAndServer()
 
-const authorizationToken = (req, res, next) => {
+const authorizationToken = (request, response, next) => {
     let jwtToken
-    const authHeader = req.headers['authorization']
-    if (authHeader !== undefined){
-        jwtToken = authHeader.split(' ')[1]
+    const authHeader = request.headers['authorization']
+    if (authHeader !== undefined) {
+      jwtToken = authHeader.split(' ')[1]
     }
-    if (jwtToken === undefined){
-        res.status(400)
-        res.send('Invalid JWT Token')
-    }else{
-        jwt.verify(jwtToken, 'user_name', async (error, payload) =>{
-            if(error){
-                res.status(400)
-                res.send('Invalid JWT Token')
-            }else{
-                req.username = payload.username
-                next()
-            }
-        })
+    if (jwtToken === undefined) {
+      response.status(401)
+      response.send('Invalid JWT Token')
+    } else {
+      jwt.verify(jwtToken, 'user_name', async (error, payload) => {
+        if (error) {
+          response.status(401)
+          response.send('Invalid JWT Token')
+        } else {
+          request.username = payload.username
+          next()
+        }
+      })
     }
-}
+  }
 
-app.get('/users', authorizationToken, async (req, res) =>{
+app.get('/users', async (req, res) =>{
     const query = `SELECT * FROM hotel_user`
     const getUser = await db.all(query)
     res.send(getUser)
@@ -100,23 +105,25 @@ app.delete('/users/:id/', async (req, res)=>{
     res.send("delete User")
 })
 
-app.post('/login', async (req, res)=>{
+app.post('/login/', async (req, res) => {
     const {username, password} = req.body
-    const selectLoginQuery = `SELECT * FROM hotel_user WHERE username = '${username}'`
-    const loginUser = await db.get(selectLoginQuery)
+    const selectUserQuery = `SELECT * FROM hotel_user WHERE username = '${username}' ;`
+    const loginUser = await db.get(selectUserQuery)
     if (loginUser === undefined){
-        res.status(400)
-        res.send('Invalid user')
+        res.status(300)
+        res.send('Invalid user')        
     }else{
         const isPasswordMatch = await bcrypt.compare(password, loginUser.password)
         if (isPasswordMatch === true){
             const payload = {username: username}
             const jwtToken = jwt.sign(payload, 'user_name')
             res.status(200)
-            res.send(jwtToken)
+            res.send({jwtToken})
         }else{
-            res.status(400)
+            res.status(301)
             res.send('Invalid Password')
         }
     }
 })
+
+module.exports = app;

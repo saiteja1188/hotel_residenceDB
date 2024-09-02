@@ -1,6 +1,6 @@
 
 GET http://localhost:3006/users/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIiwiaWF0IjoxNzI0NjU1NjE0fQ.sUx_fNJkX_cBnmyatJ0CSjp6m8ni4da3Vo141G3CGbY
+
 
 ###
 
@@ -42,8 +42,8 @@ Content-Type: application/json
 
 
 {
-    "username": "Saiteja",
-    "password": "sai@123"
+    "username": "channel",
+    "password": "channel@123"
 }
 
 ###
